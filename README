@@ -1,0 +1,9 @@
+Database-Driven Shopping Platform – Website connected to a central database storing product details, stock levels, prices, and sales history.
+
+Multi-User System – Supports multiple customers browsing and purchasing, with secure authentication and role-based access.
+
+Manager Login & Dashboard – Dedicated manager account with access to administrative controls and business insights.
+
+AI Assistant for Management – Integrated AI assistant provides automated summaries (top-selling products, low stock alerts, poor performers).
+
+Business Insights & Optimization – Uses sales data to support restocking decisions, inventory optimization, and performance tracking.
