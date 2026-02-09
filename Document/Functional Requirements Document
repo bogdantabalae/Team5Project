@@ -1,0 +1,16 @@
+Game Codes Marketplace - Functional Requirements Document
+
+Project Overview:
+  A digital marketplace platform that allows customers to purchase game activation codes for various gaming platforms. 
+  The system facilitates instant delivery of digital game codes to customers after successful payment.
+
+Purpose:
+  To provide gamers with a convenient, secure, and instant way to purchase game activation codes for popular gaming platforms at competitive prices.
+
+Core Functions:
+ - Browse and search available game codes
+ - Purchase game codes securely
+ - Receive instant code delivery
+ - Manage user accounts and purchase history
+ - Process payments
+ - Manage inventory (admin)
