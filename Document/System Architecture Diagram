@@ -1,1 +1,22 @@
 
+Angular Frontend - 
+This is the UI part of the website. When a customer makes a purchase, angular sends a HTTP Request with JSON to the controlelr.
+
+Spring Boot Controller - 
+Controllers are API endpoints. It receives the HTTP request and converts the JSON into a Java object which allows the service layer
+to process it.
+
+Service Layer - 
+This is the business logic of the project. It handles data vverification, e.g. check if user exists, check if product is available,
+etc. 
+
+Repositroy Layer - 
+JPA/Hibernate converts Java objects into SQL and runs queries. This allows the database to communicate with the backend.
+
+MySQL Database - 
+The database stores all the data in tables, like customer information and product information.
+
+
+
+The process is reversed when sending data from database to angular, which is then correctly displayed.
+Angular never talks with the database directly.
