@@ -1,13 +1,13 @@
 
 Angular Frontend - 
-This is the UI part of the website. When a customer makes a purchase, angular sends a HTTP Request with JSON to the controlelr.
+This is the UI part of the website. When a customer makes a purchase, angular sends a HTTP Request with JSON to the controller.
 
 Spring Boot Controller - 
 Controllers are API endpoints. It receives the HTTP request and converts the JSON into a Java object which allows the service layer
 to process it.
 
 Service Layer - 
-This is the business logic of the project. It handles data vverification, e.g. check if user exists, check if product is available,
+This is the business logic of the project. It handles data verification, e.g. check if user exists, check if product is available,
 etc. 
 
 Repositroy Layer - 
