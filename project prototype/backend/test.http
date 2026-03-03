@@ -1,0 +1,7 @@
+POST http://localhost:8080/api/orders/buy
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "gameId": 1
+}
