@@ -1,18 +1,18 @@
--- Creation file for the code store project prototype (main group project year 3 semester 2)
+-- Creation file for the code store project (main group project year 3 semester 2)
 -- schema contain 4 tables ( users, games, game codes and orders)
--- this schema is for presentation and testing purposes 
+
 
 -- Set the default storage engine
 set default_storage_engine=InnoDB;
 
 -- delete the DB if it exists
-drop database if exists code_store_prototype;
+drop database if exists game_store_db;
 
 -- create a new database/schema
-create database code_store_prototype character set utf8mb4 collate utf8mb4_unicode_ci;
+create database game_store_db character set utf8mb4 collate utf8mb4_unicode_ci;
 
--- select the code_store_prototype database
-use code_store_prototype;
+-- select the game_store_db database
+use game_store_db;
 
 -- create the users table with appropriate columns
 CREATE TABLE users (
