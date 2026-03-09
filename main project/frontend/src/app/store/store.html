@@ -1,7 +1,7 @@
 <h1>Game Store</h1>
 
 <div *ngFor="let game of games">
-  <h3>{{ game.name }}</h3>
+  <h3>{{ game.title }}</h3>
   <p>€{{ game.price }}</p>
   <button (click)="buyGame(game)">Buy</button>
   <hr>

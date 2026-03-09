@@ -24,7 +24,7 @@ public class User {
     private LocalDateTime createdAt;
 
     public Long getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(Long id) {
@@ -32,7 +32,7 @@ public class User {
     }
 
     public String getEmail() {
-        return this.email;
+        return email;
     }
 
     public void setEmail(String email) {
@@ -40,7 +40,7 @@ public class User {
     }
 
     public String getPassword() {
-        return this.password;
+        return password;
     }
 
     public void setPassword(String password) {
@@ -48,7 +48,7 @@ public class User {
     }
 
     public String getRole() {
-        return this.role;
+        return role;
     }
 
     public void setRole(String role) {
@@ -56,11 +56,10 @@ public class User {
     }
 
     public LocalDateTime getCreatedAt() {
-        return this.createdAt;
+        return createdAt;
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
-
 }
