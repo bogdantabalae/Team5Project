@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {CommonModule } from '@angular/common';
 import { GameService } from '../game';
 import { OrderService } from '../order';
+import { AuthService } from '../auth';
 
 @Component({
   selector: 'app-store',
@@ -14,7 +15,7 @@ export class StoreComponent {
 
   games: any[] = [];
 
-  constructor(private gameService: GameService, private orderService: OrderService) {}
+  constructor(private gameService: GameService, private orderService: OrderService, private authService: AuthService) {}
 
   ngOnInit() {
     this.gameService.getGames().subscribe((data: any[]) => {
@@ -24,7 +25,7 @@ export class StoreComponent {
 
   buyGame(game: any) {
 
-  const userId = 1; // TEMPORARY (until login system)
+  const userId = this.authService.getUserId();
 
   this.orderService.buyGame(userId, game.id)
     .subscribe({
