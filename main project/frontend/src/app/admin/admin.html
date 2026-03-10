@@ -1,0 +1,103 @@
+<div class="admin-wrapper">
+
+  <!-- Header -->
+  <header class="admin-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">🎮</span>
+        <span class="logo-text">GameStore <span class="logo-tag">Admin</span></span>
+      </div>
+      <p class="header-sub">Game Code Manager</p>
+    </div>
+  </header>
+
+  <!-- Notifications -->
+  <div class="toast success" *ngIf="successMessage">✅ {{ successMessage }}</div>
+  <div class="toast error" *ngIf="errorMessage">❌ {{ errorMessage }}</div>
+
+  <main class="admin-main">
+
+    <!-- Add Code Panel -->
+    <section class="panel add-panel">
+      <h2 class="panel-title">Add Game Code</h2>
+      <p class="panel-sub">Assign a new activation code to a game</p>
+
+      <div class="form-group">
+        <label>Select Game</label>
+        <select [(ngModel)]="selectedGameId" class="input-field">
+          <option [ngValue]="null" disabled>-- Choose a game --</option>
+          <option *ngFor="let game of games" [ngValue]="game.id">
+            {{ game.title }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Game Code</label>
+        <input
+          type="text"
+          [(ngModel)]="newCode"
+          placeholder="e.g. XXXX-YYYY-ZZZZ-AAAA"
+          class="input-field"
+        />
+      </div>
+
+      <button class="btn btn-add" (click)="addCode()">
+        + Add Code
+      </button>
+    </section>
+
+    <!-- Game Codes Table -->
+    <section class="panel table-panel">
+      <div class="table-header">
+        <h2 class="panel-title">All Game Codes</h2>
+        <span class="badge">{{ gameCodes.length }} total</span>
+      </div>
+
+      <div *ngIf="isLoading" class="loading">Loading codes...</div>
+
+      <div *ngIf="!isLoading && gameCodes.length === 0" class="empty-state">
+        No game codes found. Add one above!
+      </div>
+
+      <div *ngIf="!isLoading && gameCodes.length > 0" class="table-wrapper">
+        <table class="codes-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Game</th>
+              <th>Code</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let gc of gameCodes" [class.sold-row]="gc.sold">
+              <td class="td-id">#{{ gc.id }}</td>
+              <td class="td-game">{{ gc.game?.title || getGameTitle(gc.game?.id) }}</td>
+              <td class="td-code">
+                <code>{{ gc.code }}</code>
+              </td>
+              <td>
+                <span class="status-badge" [class.sold]="gc.sold" [class.available]="!gc.sold">
+                  {{ gc.sold ? 'Sold' : 'Available' }}
+                </span>
+              </td>
+              <td>
+                <button
+                  class="btn btn-delete"
+                  (click)="deleteCode(gc.id)"
+                  [disabled]="gc.sold"
+                  [title]="gc.sold ? 'Cannot delete a sold code' : 'Delete this code'"
+                >
+                  🗑 Delete
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+</div>
