@@ -17,4 +17,9 @@ public class GameService {
     public List<Game> getAllGames() {
         return repo.findAll();
     }
+    
+ // Add a new game
+    public Game addGame(Game game) {
+        return repo.save(game);
+    }
 }

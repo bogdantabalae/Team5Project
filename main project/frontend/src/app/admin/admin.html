@@ -7,7 +7,7 @@
         <span class="logo-icon">🎮</span>
         <span class="logo-text">GameStore <span class="logo-tag">Admin</span></span>
       </div>
-      <p class="header-sub">Game Code Manager</p>
+      <p class="header-sub">Game Manager</p>
     </div>
   </header>
 
@@ -17,50 +17,95 @@
 
   <main class="admin-main">
 
-    <!-- Add Code Panel -->
-    <section class="panel add-panel">
-      <h2 class="panel-title">Add Game Code</h2>
-      <p class="panel-sub">Assign a new activation code to a game</p>
+    <!-- Top Row: Two panels side by side -->
+    <div class="top-row">
 
-      <div class="form-group">
-        <label>Select Game</label>
-        <select [(ngModel)]="selectedGameId" class="input-field">
-          <option [ngValue]="null" disabled>-- Choose a game --</option>
-          <option *ngFor="let game of games" [ngValue]="game.id">
-            {{ game.title }}
-          </option>
-        </select>
-      </div>
+      <!-- Panel 1: Add New Game -->
+      <section class="panel">
+        <h2 class="panel-title">➕ Add New Game</h2>
+        <p class="panel-sub">Add a new game to the store</p>
 
-      <div class="form-group">
-        <label>Game Code</label>
-        <input
-          type="text"
-          [(ngModel)]="newCode"
-          placeholder="e.g. XXXX-YYYY-ZZZZ-AAAA"
-          class="input-field"
-        />
-      </div>
+        <div class="form-group">
+          <label>Game Title</label>
+          <input type="text" [(ngModel)]="newGame.title" placeholder="e.g. FIFA 25" class="input-field" />
+        </div>
 
-      <button class="btn btn-add" (click)="addCode()">
-        + Add Code
-      </button>
-    </section>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea [(ngModel)]="newGame.description" placeholder="Short description..." class="input-field textarea-field"></textarea>
+        </div>
 
-    <!-- Game Codes Table -->
+        <div class="form-group">
+          <label>Price (€)</label>
+          <input type="number" [(ngModel)]="newGame.price" placeholder="e.g. 59.99" class="input-field" />
+        </div>
+
+        <div class="form-group">
+          <label>Image URL</label>
+          <input type="text" [(ngModel)]="newGame.imageUrl" placeholder="e.g. fifa25.jpg" class="input-field" />
+        </div>
+
+        <button class="btn btn-add" (click)="addGame()">+ Add Game</button>
+      </section>
+
+      <!-- Panel 2: Add Game Code -->
+      <section class="panel">
+        <h2 class="panel-title">🔑 Add Game Code</h2>
+        <p class="panel-sub">Assign an activation code to a game</p>
+
+        <div class="form-group">
+          <label>Select Game</label>
+          <select [(ngModel)]="selectedGameId" class="input-field">
+            <option [ngValue]="null" disabled>-- Choose a game --</option>
+            <option *ngFor="let game of games" [ngValue]="game.id">
+              {{ game.title }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Game Code</label>
+          <input
+            type="text"
+            [(ngModel)]="newCode"
+            placeholder="e.g. XXXX-YYYY-ZZZZ-AAAA"
+            class="input-field"
+          />
+        </div>
+
+        <button class="btn btn-add" (click)="addCode()">+ Add Code</button>
+      </section>
+
+    </div>
+
+    <!-- Bottom Row: Full-width codes table with game filter -->
     <section class="panel table-panel">
+
       <div class="table-header">
-        <h2 class="panel-title">All Game Codes</h2>
-        <span class="badge">{{ gameCodes.length }} total</span>
+        <div class="table-title-group">
+          <h2 class="panel-title">📋 Game Codes</h2>
+          <span class="badge">{{ filteredGameCodes.length }} codes</span>
+        </div>
+
+        <!-- Dropdown to filter by game -->
+        <div class="filter-group">
+          <label>Filter by Game</label>
+          <select [(ngModel)]="filterGameId" (ngModelChange)="filterCodes()" class="input-field filter-select">
+            <option [ngValue]="null">All Games</option>
+            <option *ngFor="let game of games" [ngValue]="game.id">
+              {{ game.title }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <div *ngIf="isLoading" class="loading">Loading codes...</div>
 
-      <div *ngIf="!isLoading && gameCodes.length === 0" class="empty-state">
-        No game codes found. Add one above!
+      <div *ngIf="!isLoading && filteredGameCodes.length === 0" class="empty-state">
+        No game codes found.
       </div>
 
-      <div *ngIf="!isLoading && gameCodes.length > 0" class="table-wrapper">
+      <div *ngIf="!isLoading && filteredGameCodes.length > 0" class="table-wrapper">
         <table class="codes-table">
           <thead>
             <tr>
@@ -72,12 +117,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let gc of gameCodes" [class.sold-row]="gc.sold">
+            <tr *ngFor="let gc of filteredGameCodes" [class.sold-row]="gc.sold">
               <td class="td-id">#{{ gc.id }}</td>
-              <td class="td-game">{{ gc.game?.title || getGameTitle(gc.game?.id) }}</td>
-              <td class="td-code">
-                <code>{{ gc.code }}</code>
-              </td>
+              <td class="td-game">{{ gc.game?.title }}</td>
+              <td class="td-code"><code>{{ gc.code }}</code></td>
               <td>
                 <span class="status-badge" [class.sold]="gc.sold" [class.available]="!gc.sold">
                   {{ gc.sold ? 'Sold' : 'Available' }}
@@ -97,6 +140,7 @@
           </tbody>
         </table>
       </div>
+
     </section>
 
   </main>
