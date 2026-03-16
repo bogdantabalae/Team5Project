@@ -14,12 +14,34 @@ public class GameService {
         this.repo = repo;
     }
 
+    // Get all games
     public List<Game> getAllGames() {
         return repo.findAll();
     }
-    
- // Add a new game
+
+    // Add a new game
     public Game addGame(Game game) {
         return repo.save(game);
+    }
+
+    // Update an existing game
+    public Game updateGame(Long id, Game updatedGame) {
+        Game existing = repo.findById(id)
+            .orElseThrow(() -> new RuntimeException("Game not found with id: " + id));
+
+        existing.setTitle(updatedGame.getTitle());
+        existing.setDescription(updatedGame.getDescription());
+        existing.setPrice(updatedGame.getPrice());
+        existing.setImageUrl(updatedGame.getImageUrl());
+
+        return repo.save(existing);
+    }
+
+    // Delete a game
+    public void deleteGame(Long id) {
+        if (!repo.existsById(id)) {
+            throw new RuntimeException("Game not found with id: " + id);
+        }
+        repo.deleteById(id);
     }
 }

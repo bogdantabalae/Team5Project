@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { GameCodeService } from '../game-code.service';
-import { GameService } from '../game';
 
 @Component({
   selector: 'app-admin',
@@ -15,10 +14,13 @@ import { GameService } from '../game';
 export class AdminComponent implements OnInit {
 
   private gameCodeService = inject(GameCodeService);
-  private gameService = inject(GameService);
   private http = inject(HttpClient);
   private cdr = inject(ChangeDetectorRef);
 
+  private gamesUrl = 'http://localhost:8080/api/games';
+  private codesUrl = 'http://localhost:8080/api/game-codes';
+
+  // Data
   gameCodes: any[] = [];
   filteredGameCodes: any[] = [];
   games: any[] = [];
@@ -33,8 +35,12 @@ export class AdminComponent implements OnInit {
   // Filter
   filterGameId: number | null = null;
 
-  // Modal
-  showModal: boolean = false;
+  // Game modal
+  showGameModal: boolean = false;
+  editGame: any = { id: null, title: '', description: '', price: null, imageUrl: '' };
+
+  // Code modal
+  showCodeModal: boolean = false;
   editingCode: any = null;
   editCode: string = '';
 
@@ -47,8 +53,9 @@ export class AdminComponent implements OnInit {
     this.loadGames();
   }
 
+  // ---- Load Data ----
   loadGames() {
-    this.http.get<any[]>('http://localhost:8080/api/games').subscribe({
+    this.http.get<any[]>(this.gamesUrl).subscribe({
       next: (data) => {
         this.games = data;
         this.loadGameCodes();
@@ -60,7 +67,7 @@ export class AdminComponent implements OnInit {
 
   loadGameCodes() {
     this.isLoading = true;
-    this.gameCodeService.getAllGameCodes().subscribe({
+    this.http.get<any[]>(this.codesUrl).subscribe({
       next: (data) => {
         this.gameCodes = data;
         this.filterCodes();
@@ -78,13 +85,9 @@ export class AdminComponent implements OnInit {
   }
 
   filterCodes() {
-    if (this.filterGameId === null) {
-      this.filteredGameCodes = this.gameCodes;
-    } else {
-      this.filteredGameCodes = this.gameCodes.filter(
-        gc => gc.game?.id === this.filterGameId
-      );
-    }
+    this.filteredGameCodes = this.filterGameId === null
+      ? this.gameCodes
+      : this.gameCodes.filter(gc => gc.game?.id === this.filterGameId);
     this.cdr.detectChanges();
   }
 
@@ -94,8 +97,7 @@ export class AdminComponent implements OnInit {
       this.showError('Please enter at least a title and price.');
       return;
     }
-
-    this.http.post<any>('http://localhost:8080/api/games', this.newGame).subscribe({
+    this.http.post<any>(this.gamesUrl, this.newGame).subscribe({
       next: () => {
         setTimeout(() => {
           this.newGame = { title: '', description: '', price: null, imageUrl: '' };
@@ -114,7 +116,6 @@ export class AdminComponent implements OnInit {
       this.showError('Please select a game and enter a code.');
       return;
     }
-
     this.gameCodeService.addGameCode(this.selectedGameId, this.newCode.trim()).subscribe({
       next: () => {
         setTimeout(() => {
@@ -129,54 +130,89 @@ export class AdminComponent implements OnInit {
     });
   }
 
-  // ---- Modal ----
-  openModal(gc: any) {
-    this.editingCode = gc;
-    this.editCode = gc.code;
-    this.showModal = true;
+  // ---- Game Modal ----
+  openGameModal(game: any) {
+    this.editGame = { ...game }; // copy so we don't mutate the table directly
+    this.showGameModal = true;
     this.cdr.detectChanges();
   }
 
-  closeModal() {
-    this.showModal = false;
+  closeGameModal() {
+    this.showGameModal = false;
+    this.editGame = { id: null, title: '', description: '', price: null, imageUrl: '' };
+    this.cdr.detectChanges();
+  }
+
+  saveGameEdit() {
+    if (!this.editGame.title.trim() || !this.editGame.price) {
+      this.showError('Title and price are required.');
+      return;
+    }
+    this.http.put<any>(`${this.gamesUrl}/${this.editGame.id}`, this.editGame).subscribe({
+      next: () => {
+        this.showSuccess('Game updated successfully!');
+        this.closeGameModal();
+        this.loadGames();
+      },
+      error: () => this.showError('Failed to update game.')
+    });
+  }
+
+  deleteGame(id: number) {
+    if (!confirm('Delete this game? This will also remove all its codes!')) return;
+    this.http.delete(`${this.gamesUrl}/${id}`).subscribe({
+      next: () => {
+        this.showSuccess('Game deleted.');
+        this.closeGameModal();
+        this.loadGames();
+      },
+      error: () => this.showError('Failed to delete game.')
+    });
+  }
+
+  // ---- Code Modal ----
+  openCodeModal(gc: any) {
+    this.editingCode = gc;
+    this.editCode = gc.code;
+    this.showCodeModal = true;
+    this.cdr.detectChanges();
+  }
+
+  closeCodeModal() {
+    this.showCodeModal = false;
     this.editingCode = null;
     this.editCode = '';
     this.cdr.detectChanges();
   }
 
-  saveEdit() {
+  saveCodeEdit() {
     if (!this.editCode.trim()) {
       this.showError('Code cannot be empty.');
       return;
     }
-
-    this.http.put<any>(
-      `http://localhost:8080/api/game-codes/${this.editingCode.id}`,
-      { code: this.editCode }
-    ).subscribe({
+    this.http.put<any>(`${this.codesUrl}/${this.editingCode.id}`, { code: this.editCode }).subscribe({
       next: () => {
         this.showSuccess('Code updated successfully!');
-        this.closeModal();
+        this.closeCodeModal();
         this.loadGameCodes();
       },
       error: () => this.showError('Failed to update code.')
     });
   }
 
-  // ---- Delete Code ----
   deleteCode(id: number) {
     if (!confirm('Are you sure you want to delete this game code?')) return;
-
     this.gameCodeService.deleteGameCode(id).subscribe({
       next: () => {
         this.showSuccess('Game code deleted.');
-        this.closeModal();
+        this.closeCodeModal();
         this.loadGameCodes();
       },
       error: () => this.showError('Failed to delete game code.')
     });
   }
 
+  // ---- Notifications ----
   showSuccess(msg: string) {
     this.successMessage = msg;
     this.errorMessage = '';

@@ -133,9 +133,7 @@
 }
 
 /* ---- Form ---- */
-.form-group {
-  margin-bottom: 18px;
-}
+.form-group { margin-bottom: 18px; }
 
 .form-group label {
   display: block;
@@ -220,7 +218,7 @@ select.input-field option {
   border-color: rgba(59, 130, 246, 0.5);
 }
 
-/* ---- Table Panel ---- */
+/* ---- Table Panels ---- */
 .table-panel { width: 100%; }
 
 .table-header {
@@ -296,8 +294,11 @@ select.input-field option {
 
 .sold-row { opacity: 0.5; }
 
-.td-id { color: rgba(255,255,255,0.3); font-size: 12px; }
-.td-game { font-weight: 500; color: #c4b5fd; }
+.td-id    { color: rgba(255,255,255,0.3); font-size: 12px; }
+.td-game  { font-weight: 500; color: #c4b5fd; }
+.td-price { color: #34d399; font-weight: 500; }
+.td-desc  { color: rgba(255,255,255,0.45); font-size: 13px; max-width: 260px; }
+.td-img   { color: rgba(255,255,255,0.3); font-size: 12px; font-family: 'DM Mono', monospace; }
 
 .td-code code {
   font-family: 'DM Mono', monospace;
@@ -337,7 +338,7 @@ select.input-field option {
   font-size: 15px;
 }
 
-/* ---- Modal ---- */
+/* ---- Modals ---- */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -395,9 +396,6 @@ select.input-field option {
   border-radius: 8px;
   cursor: pointer;
   font-size: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   transition: all 0.2s;
 }
 
@@ -406,9 +404,7 @@ select.input-field option {
   color: #fff;
 }
 
-.modal-body {
-  padding: 20px 24px;
-}
+.modal-body { padding: 20px 24px; }
 
 .modal-info {
   display: flex;
@@ -457,10 +453,7 @@ select.input-field option {
   box-shadow: 0 6px 20px rgba(124, 58, 237, 0.45);
 }
 
-.btn-save:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
+.btn-save:disabled { opacity: 0.3; cursor: not-allowed; }
 
 .btn-delete-modal {
   flex: 1;
@@ -476,10 +469,7 @@ select.input-field option {
   border-color: rgba(239, 68, 68, 0.5);
 }
 
-.btn-delete-modal:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
+.btn-delete-modal:disabled { opacity: 0.3; cursor: not-allowed; }
 
 .btn-cancel {
   padding: 11px 18px;

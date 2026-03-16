@@ -17,7 +17,7 @@
 
   <main class="admin-main">
 
-    <!-- Top Row: Two panels side by side -->
+    <!-- Row 1: Add Game + Add Code -->
     <div class="top-row">
 
       <!-- Panel 1: Add New Game -->
@@ -29,22 +29,18 @@
           <label>Game Title</label>
           <input type="text" [(ngModel)]="newGame.title" placeholder="e.g. FIFA 25" class="input-field" />
         </div>
-
         <div class="form-group">
           <label>Description</label>
           <textarea [(ngModel)]="newGame.description" placeholder="Short description..." class="input-field textarea-field"></textarea>
         </div>
-
         <div class="form-group">
           <label>Price (€)</label>
           <input type="number" [(ngModel)]="newGame.price" placeholder="e.g. 59.99" class="input-field" />
         </div>
-
         <div class="form-group">
           <label>Image URL</label>
           <input type="text" [(ngModel)]="newGame.imageUrl" placeholder="e.g. fifa25.jpg" class="input-field" />
         </div>
-
         <button class="btn btn-add" (click)="addGame()">+ Add Game</button>
       </section>
 
@@ -57,30 +53,59 @@
           <label>Select Game</label>
           <select [(ngModel)]="selectedGameId" class="input-field">
             <option [ngValue]="null" disabled>-- Choose a game --</option>
-            <option *ngFor="let game of games" [ngValue]="game.id">
-              {{ game.title }}
-            </option>
+            <option *ngFor="let game of games" [ngValue]="game.id">{{ game.title }}</option>
           </select>
         </div>
-
         <div class="form-group">
           <label>Game Code</label>
-          <input
-            type="text"
-            [(ngModel)]="newCode"
-            placeholder="e.g. XXXX-YYYY-ZZZZ-AAAA"
-            class="input-field"
-          />
+          <input type="text" [(ngModel)]="newCode" placeholder="e.g. XXXX-YYYY-ZZZZ-AAAA" class="input-field" />
         </div>
-
         <button class="btn btn-add" (click)="addCode()">+ Add Code</button>
       </section>
 
     </div>
 
-    <!-- Bottom Row: Full-width codes table with game filter -->
+    <!-- Row 2: All Games Table -->
     <section class="panel table-panel">
+      <div class="table-header">
+        <div class="table-title-group">
+          <h2 class="panel-title">🕹️ All Games</h2>
+          <span class="badge">{{ games.length }} games</span>
+        </div>
+      </div>
 
+      <div *ngIf="games.length === 0" class="empty-state">No games found.</div>
+
+      <div *ngIf="games.length > 0" class="table-wrapper">
+        <table class="codes-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Price</th>
+              <th>Image URL</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let game of games">
+              <td class="td-id">#{{ game.id }}</td>
+              <td class="td-game">{{ game.title }}</td>
+              <td class="td-desc">{{ game.description }}</td>
+              <td class="td-price">€{{ game.price }}</td>
+              <td class="td-img">{{ game.imageUrl }}</td>
+              <td>
+                <button class="btn btn-edit" (click)="openGameModal(game)">✏️ Edit</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Row 3: Game Codes Table -->
+    <section class="panel table-panel">
       <div class="table-header">
         <div class="table-title-group">
           <h2 class="panel-title">📋 Game Codes</h2>
@@ -90,18 +115,14 @@
           <label>Filter by Game</label>
           <select [(ngModel)]="filterGameId" (ngModelChange)="filterCodes()" class="input-field filter-select">
             <option [ngValue]="null">All Games</option>
-            <option *ngFor="let game of games" [ngValue]="game.id">
-              {{ game.title }}
-            </option>
+            <option *ngFor="let game of games" [ngValue]="game.id">{{ game.title }}</option>
           </select>
         </div>
       </div>
 
       <div *ngIf="isLoading" class="loading">Loading codes...</div>
 
-      <div *ngIf="!isLoading && filteredGameCodes.length === 0" class="empty-state">
-        No game codes found.
-      </div>
+      <div *ngIf="!isLoading && filteredGameCodes.length === 0" class="empty-state">No game codes found.</div>
 
       <div *ngIf="!isLoading && filteredGameCodes.length > 0" class="table-wrapper">
         <table class="codes-table">
@@ -125,30 +146,63 @@
                 </span>
               </td>
               <td>
-                <button class="btn btn-edit" (click)="openModal(gc)">
-                  ✏️ Edit
-                </button>
+                <button class="btn btn-edit" (click)="openCodeModal(gc)">✏️ Edit</button>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-
     </section>
 
   </main>
 
-  <!-- ---- Modal Popup ---- -->
-  <div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+  <!-- ---- Edit GAME Modal ---- -->
+  <div class="modal-overlay" *ngIf="showGameModal" (click)="closeGameModal()">
     <div class="modal" (click)="$event.stopPropagation()">
 
       <div class="modal-header">
-        <h3 class="modal-title">Edit Game Code</h3>
-        <button class="modal-close" (click)="closeModal()">✕</button>
+        <h3 class="modal-title">✏️ Edit Game</h3>
+        <button class="modal-close" (click)="closeGameModal()">✕</button>
       </div>
 
       <div class="modal-body">
+        <div class="form-group">
+          <label>Game Title</label>
+          <input type="text" [(ngModel)]="editGame.title" class="input-field" placeholder="Game title" />
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea [(ngModel)]="editGame.description" class="input-field textarea-field" placeholder="Description"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Price (€)</label>
+          <input type="number" [(ngModel)]="editGame.price" class="input-field" placeholder="Price" />
+        </div>
+        <div class="form-group">
+          <label>Image URL</label>
+          <input type="text" [(ngModel)]="editGame.imageUrl" class="input-field" placeholder="Image URL" />
+        </div>
+      </div>
 
+      <div class="modal-footer">
+        <button class="btn btn-save" (click)="saveGameEdit()">💾 Save Changes</button>
+        <button class="btn btn-delete-modal" (click)="deleteGame(editGame.id)">🗑 Delete Game</button>
+        <button class="btn btn-cancel" (click)="closeGameModal()">Cancel</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ---- Edit GAME CODE Modal ---- -->
+  <div class="modal-overlay" *ngIf="showCodeModal" (click)="closeCodeModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+      <div class="modal-header">
+        <h3 class="modal-title">✏️ Edit Game Code</h3>
+        <button class="modal-close" (click)="closeCodeModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
         <div class="modal-info">
           <span class="modal-game-name">{{ editingCode?.game?.title }}</span>
           <span class="status-badge" [class.sold]="editingCode?.sold" [class.available]="!editingCode?.sold">
@@ -158,40 +212,18 @@
 
         <div class="form-group">
           <label>Game Code</label>
-          <input
-            type="text"
-            [(ngModel)]="editCode"
-            class="input-field"
-            [disabled]="editingCode?.sold"
-            placeholder="Enter new code"
-          />
+          <input type="text" [(ngModel)]="editCode" class="input-field" [disabled]="editingCode?.sold" placeholder="Enter new code" />
         </div>
 
         <p *ngIf="editingCode?.sold" class="modal-warning">
           ⚠️ This code has already been sold and cannot be edited.
         </p>
-
       </div>
 
       <div class="modal-footer">
-        <button
-          class="btn btn-save"
-          (click)="saveEdit()"
-          [disabled]="editingCode?.sold"
-        >
-          💾 Save Changes
-        </button>
-        <button
-          class="btn btn-delete-modal"
-          (click)="deleteCode(editingCode?.id)"
-          [disabled]="editingCode?.sold"
-          [title]="editingCode?.sold ? 'Cannot delete a sold code' : ''"
-        >
-          🗑 Delete Code
-        </button>
-        <button class="btn btn-cancel" (click)="closeModal()">
-          Cancel
-        </button>
+        <button class="btn btn-save" (click)="saveCodeEdit()" [disabled]="editingCode?.sold">💾 Save Changes</button>
+        <button class="btn btn-delete-modal" (click)="deleteCode(editingCode?.id)" [disabled]="editingCode?.sold">🗑 Delete Code</button>
+        <button class="btn btn-cancel" (click)="closeCodeModal()">Cancel</button>
       </div>
 
     </div>
