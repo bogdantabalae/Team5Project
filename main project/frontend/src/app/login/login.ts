@@ -42,6 +42,7 @@ export class LoginComponent {
     }
 
     if (!this.isLoginMode) {
+      // ---- Register ----
       if (this.password !== this.confirmPassword) {
         this.errorMessage = 'Passwords do not match.';
         return;
@@ -51,7 +52,7 @@ export class LoginComponent {
         next: (res) => {
           if (res.success) {
             this.authService.saveSession(res.userId, res.role);
-            this.router.navigate(['/store']);
+            this.router.navigate(['/store']); // new users are always USER role
           } else {
             this.errorMessage = res.message;
           }
@@ -62,11 +63,19 @@ export class LoginComponent {
       });
 
     } else {
+      // ---- Login ----
       this.authService.login(this.email, this.password).subscribe({
         next: (res) => {
           if (res.success) {
             this.authService.saveSession(res.userId, res.role);
-            this.router.navigate(['/store']);
+
+            // Redirect based on role
+            if (res.role === 'ADMIN') {
+              this.router.navigate(['/admin']);  // ADMIN → admin page
+            } else {
+              this.router.navigate(['/store']);  // USER → store
+            }
+
           } else {
             this.errorMessage = res.message;
           }
