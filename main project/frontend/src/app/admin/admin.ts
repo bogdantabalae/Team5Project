@@ -38,8 +38,7 @@ export class AdminComponent implements OnInit {
 
 loadGames() {
   this.gameService.getGames().subscribe({
-    next: (data) => {
-      console.log('First game object:', data[0]); 
+    next: (data) => { 
       this.games = data;
       this.loadGameCodes();
       this.cdr.detectChanges();
@@ -54,10 +53,12 @@ loadGames() {
       next: (data) => {
         this.gameCodes = data;
         this.isLoading = false;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.showError('Failed to load game codes.');
         this.isLoading = false;
+        this.cdr.detectChanges();
       }
     });
   }
