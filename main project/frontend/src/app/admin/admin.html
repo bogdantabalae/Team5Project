@@ -86,8 +86,6 @@
           <h2 class="panel-title">📋 Game Codes</h2>
           <span class="badge">{{ filteredGameCodes.length }} codes</span>
         </div>
-
-        <!-- Dropdown to filter by game -->
         <div class="filter-group">
           <label>Filter by Game</label>
           <select [(ngModel)]="filterGameId" (ngModelChange)="filterCodes()" class="input-field filter-select">
@@ -127,13 +125,8 @@
                 </span>
               </td>
               <td>
-                <button
-                  class="btn btn-delete"
-                  (click)="deleteCode(gc.id)"
-                  [disabled]="gc.sold"
-                  [title]="gc.sold ? 'Cannot delete a sold code' : 'Delete this code'"
-                >
-                  🗑 Delete
+                <button class="btn btn-edit" (click)="openModal(gc)">
+                  ✏️ Edit
                 </button>
               </td>
             </tr>
@@ -144,4 +137,64 @@
     </section>
 
   </main>
+
+  <!-- ---- Modal Popup ---- -->
+  <div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+      <div class="modal-header">
+        <h3 class="modal-title">Edit Game Code</h3>
+        <button class="modal-close" (click)="closeModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="modal-info">
+          <span class="modal-game-name">{{ editingCode?.game?.title }}</span>
+          <span class="status-badge" [class.sold]="editingCode?.sold" [class.available]="!editingCode?.sold">
+            {{ editingCode?.sold ? 'Sold' : 'Available' }}
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label>Game Code</label>
+          <input
+            type="text"
+            [(ngModel)]="editCode"
+            class="input-field"
+            [disabled]="editingCode?.sold"
+            placeholder="Enter new code"
+          />
+        </div>
+
+        <p *ngIf="editingCode?.sold" class="modal-warning">
+          ⚠️ This code has already been sold and cannot be edited.
+        </p>
+
+      </div>
+
+      <div class="modal-footer">
+        <button
+          class="btn btn-save"
+          (click)="saveEdit()"
+          [disabled]="editingCode?.sold"
+        >
+          💾 Save Changes
+        </button>
+        <button
+          class="btn btn-delete-modal"
+          (click)="deleteCode(editingCode?.id)"
+          [disabled]="editingCode?.sold"
+          [title]="editingCode?.sold ? 'Cannot delete a sold code' : ''"
+        >
+          🗑 Delete Code
+        </button>
+        <button class="btn btn-cancel" (click)="closeModal()">
+          Cancel
+        </button>
+      </div>
+
+    </div>
+  </div>
+
 </div>

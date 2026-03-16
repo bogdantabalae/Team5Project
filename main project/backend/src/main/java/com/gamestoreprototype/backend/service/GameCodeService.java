@@ -37,6 +37,15 @@ public class GameCodeService {
         return gameCodeRepo.save(gameCode);
     }
 
+    // Update the code string of an existing game code
+    public GameCode updateGameCode(Long id, String newCode) {
+        GameCode gameCode = gameCodeRepo.findById(id)
+            .orElseThrow(() -> new RuntimeException("Game code not found with id: " + id));
+
+        gameCode.setCode(newCode);
+        return gameCodeRepo.save(gameCode);
+    }
+
     // Delete a game code by its ID
     public void deleteGameCode(Long id) {
         if (!gameCodeRepo.existsById(id)) {

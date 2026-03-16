@@ -33,6 +33,11 @@ export class AdminComponent implements OnInit {
   // Filter
   filterGameId: number | null = null;
 
+  // Modal
+  showModal: boolean = false;
+  editingCode: any = null;
+  editCode: string = '';
+
   // UI state
   successMessage: string = '';
   errorMessage: string = '';
@@ -83,51 +88,89 @@ export class AdminComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
+  // ---- Add Game ----
   addGame() {
-  if (!this.newGame.title.trim() || !this.newGame.price) {
-    this.showError('Please enter at least a title and price.');
-    return;
+    if (!this.newGame.title.trim() || !this.newGame.price) {
+      this.showError('Please enter at least a title and price.');
+      return;
+    }
+
+    this.http.post<any>('http://localhost:8080/api/games', this.newGame).subscribe({
+      next: () => {
+        setTimeout(() => {
+          this.newGame = { title: '', description: '', price: null, imageUrl: '' };
+          this.cdr.detectChanges();
+        }, 0);
+        this.showSuccess('Game added successfully!');
+        this.loadGames();
+      },
+      error: () => this.showError('Failed to add game.')
+    });
   }
 
-  this.http.post<any>('http://localhost:8080/api/games', this.newGame).subscribe({
-    next: () => {
-      setTimeout(() => {          // ← wrap in setTimeout
-        this.newGame = { title: '', description: '', price: null, imageUrl: '' };
-        this.cdr.detectChanges();
-      }, 0);
-      this.showSuccess('Game added successfully!');
-      this.loadGames();
-    },
-    error: () => this.showError('Failed to add game.')
-  });
-}
-
+  // ---- Add Code ----
   addCode() {
-  if (!this.selectedGameId || !this.newCode.trim()) {
-    this.showError('Please select a game and enter a code.');
-    return;
+    if (!this.selectedGameId || !this.newCode.trim()) {
+      this.showError('Please select a game and enter a code.');
+      return;
+    }
+
+    this.gameCodeService.addGameCode(this.selectedGameId, this.newCode.trim()).subscribe({
+      next: () => {
+        setTimeout(() => {
+          this.newCode = '';
+          this.selectedGameId = null;
+          this.cdr.detectChanges();
+        }, 0);
+        this.showSuccess('Game code added successfully!');
+        this.loadGameCodes();
+      },
+      error: () => this.showError('Failed to add game code.')
+    });
   }
 
-  this.gameCodeService.addGameCode(this.selectedGameId, this.newCode.trim()).subscribe({
-    next: () => {
-      setTimeout(() => {          // ← wrap in setTimeout
-        this.newCode = '';
-        this.selectedGameId = null;
-        this.cdr.detectChanges();
-      }, 0);
-      this.showSuccess('Game code added successfully!');
-      this.loadGameCodes();
-    },
-    error: () => this.showError('Failed to add game code.')
-  });
-}
+  // ---- Modal ----
+  openModal(gc: any) {
+    this.editingCode = gc;
+    this.editCode = gc.code;
+    this.showModal = true;
+    this.cdr.detectChanges();
+  }
 
+  closeModal() {
+    this.showModal = false;
+    this.editingCode = null;
+    this.editCode = '';
+    this.cdr.detectChanges();
+  }
+
+  saveEdit() {
+    if (!this.editCode.trim()) {
+      this.showError('Code cannot be empty.');
+      return;
+    }
+
+    this.http.put<any>(
+      `http://localhost:8080/api/game-codes/${this.editingCode.id}`,
+      { code: this.editCode }
+    ).subscribe({
+      next: () => {
+        this.showSuccess('Code updated successfully!');
+        this.closeModal();
+        this.loadGameCodes();
+      },
+      error: () => this.showError('Failed to update code.')
+    });
+  }
+
+  // ---- Delete Code ----
   deleteCode(id: number) {
     if (!confirm('Are you sure you want to delete this game code?')) return;
 
     this.gameCodeService.deleteGameCode(id).subscribe({
       next: () => {
         this.showSuccess('Game code deleted.');
+        this.closeModal();
         this.loadGameCodes();
       },
       error: () => this.showError('Failed to delete game code.')
