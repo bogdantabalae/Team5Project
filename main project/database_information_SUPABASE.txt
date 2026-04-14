@@ -1,0 +1,10 @@
+Supabase account login and information
+https://supabase.com/
+
+Account username: G00439630@atu.ie
+Account password: https://github.com/bogdantabalae/Team5Project
+(( the password is our repo link ))
+
+
+Supabase database password: 7ErhEwSEWZEQBBxL
+
