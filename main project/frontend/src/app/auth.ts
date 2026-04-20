@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
   private apiUrl = 'http://localhost:8080/api/auth';
+  private platformId = inject(PLATFORM_ID);
 
   constructor(private http: HttpClient) {}
 
@@ -17,23 +19,30 @@ export class AuthService {
   }
 
   saveSession(userId: number, role: string) {
-    sessionStorage.setItem('userId', userId.toString());
-    sessionStorage.setItem('role', role);
+    if (isPlatformBrowser(this.platformId)) {
+      sessionStorage.setItem('userId', userId.toString());
+      sessionStorage.setItem('role', role);
+    }
   }
 
   getUserId(): number {
+    if (!isPlatformBrowser(this.platformId)) return 0;
     return Number(sessionStorage.getItem('userId'));
   }
 
   getRole(): string | null {
+    if (!isPlatformBrowser(this.platformId)) return null;
     return sessionStorage.getItem('role');
   }
 
   isLoggedIn(): boolean {
+    if (!isPlatformBrowser(this.platformId)) return false;
     return !!sessionStorage.getItem('userId');
   }
 
   logout() {
-    sessionStorage.clear();
+    if (isPlatformBrowser(this.platformId)) {
+      sessionStorage.clear();
+    }
   }
 }
