@@ -1,0 +1,157 @@
+<div class="home-wrapper">
+
+    <!-- Header -->
+    <header class="home-header">
+        <div class="header-inner">
+            <div class="logo">
+                <span class="logo-icon">🎮</span>
+                <span class="logo-text">GameStore <span class="logo-tag">Storefront</span></span>
+            </div>
+
+            <nav class="nav-links">
+                <a href="#featured">Featured</a>
+                <a href="#why-us">Why Us</a>
+                <a href="#browse">Browse</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="home-main">
+
+        <!-- Hero -->
+        <section class="hero-section panel">
+            <div class="hero-content">
+                <div class="hero-copy">
+                    <span class="eyebrow">DIGITAL GAMES. INSTANT DELIVERY.</span>
+                    <h1 class="hero-title">Power Up Your Library With the Latest Game Keys</h1>
+                    <p class="hero-text">
+                        Discover top titles, secure your game codes instantly, and level up your collection with a
+                        premium digital storefront experience.
+                    </p>
+
+                    <div class="hero-actions">
+                        <a href="#featured" class="btn btn-primary">Browse Featured Games</a>
+                        <a href="#browse" class="btn btn-secondary">Explore Store</a>
+                    </div>
+
+                    <div class="hero-stats">
+                        <div class="stat-card">
+                            <span class="stat-value">{{ games.length }}</span>
+                            <span class="stat-label">Games Available</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value">24/7</span>
+                            <span class="stat-label">Instant Access</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value">Secure</span>
+                            <span class="stat-label">Digital Delivery</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hero-visual">
+                    <div class="hero-glow"></div>
+                    <div class="feature-box">
+                        <span class="feature-label">Trending Now</span>
+                        <h3>Next-Level Titles</h3>
+                        <p>Explore fresh releases, competitive favourites, and story-rich adventures.</p>
+                    </div>
+                    <div class="feature-box alt">
+                        <span class="feature-label">Fast Checkout</span>
+                        <h3>Ready in Seconds</h3>
+                        <p>Buy digital codes and start playing without the wait.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Games -->
+        <section class="featured-section" id="featured">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">🔥 Featured Games</h2>
+                    <p class="section-sub">A curated selection styled to match your admin dashboard design</p>
+                </div>
+                <span class="badge">{{ featuredGames.length }} featured</span>
+            </div>
+
+            <div *ngIf="isLoading" class="panel empty-state">Loading featured games...</div>
+            <div *ngIf="errorMessage" class="panel error-box">{{ errorMessage }}</div>
+
+            <div *ngIf="!isLoading && !errorMessage && featuredGames.length > 0" class="games-grid">
+                <article class="game-card panel" *ngFor="let game of featuredGames">
+                    <div class="game-image-wrap">
+                        <img [src]="game.imageUrl || 'https://via.placeholder.com/400x240?text=Game+Image'"
+                            [alt]="game.title" class="game-image" />
+                        <span class="game-price">€{{ game.price }}</span>
+                    </div>
+
+                    <div class="game-body">
+                        <h3 class="game-title">{{ game.title }}</h3>
+                        <p class="game-description">
+                            {{ game.description || 'A must-play title for your collection.' }}
+                        </p>
+
+                        <div class="game-footer">
+                            <span class="game-meta">Digital Code</span>
+                            <button class="btn btn-card">View Game</button>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            <div *ngIf="!isLoading && !errorMessage && featuredGames.length === 0" class="panel empty-state">
+                No featured games available yet.
+            </div>
+        </section>
+
+        <!-- Why Choose Us -->
+        <section class="info-section" id="why-us">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">⚡ Why Choose GameStore</h2>
+                    <p class="section-sub">Built with the same premium interface language as your admin area</p>
+                </div>
+            </div>
+
+            <div class="info-grid">
+                <div class="panel info-card">
+                    <div class="info-icon">🚀</div>
+                    <h3>Instant Delivery</h3>
+                    <p>Get your digital game codes fast so you can jump into play without waiting.</p>
+                </div>
+
+                <div class="panel info-card">
+                    <div class="info-icon">🔒</div>
+                    <h3>Secure Purchases</h3>
+                    <p>A clean and trustworthy checkout experience designed for confidence and clarity.</p>
+                </div>
+
+                <div class="panel info-card">
+                    <div class="info-icon">🕹️</div>
+                    <h3>Top Game Selection</h3>
+                    <p>From sports and shooters to RPGs and indie hits, discover your next favourite title.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Browse / CTA -->
+        <section class="cta-section panel" id="browse">
+            <div class="cta-copy">
+                <span class="eyebrow">READY TO PLAY?</span>
+                <h2 class="cta-title">Start Building Your Ultimate Game Library Today</h2>
+                <p class="cta-text">
+                    Browse our collection, discover the latest titles, and unlock your next adventure with instant
+                    digital delivery.
+                </p>
+            </div>
+
+            <div class="cta-actions">
+                <a href="#featured" class="btn btn-primary">Shop Now</a>
+                <a href="/admin" class="btn btn-secondary">Admin Panel</a>
+            </div>
+        </section>
+
+    </main>
+</div>
