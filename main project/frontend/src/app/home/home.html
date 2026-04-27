@@ -71,38 +71,43 @@
             <div class="section-header">
                 <div>
                     <h2 class="section-title">🔥 Featured Games</h2>
-                    <p class="section-sub">A curated selection styled to match your admin dashboard design</p>
+                    <p class="section-sub">Games loaded directly from your database</p>
                 </div>
-                <span class="badge">{{ featuredGames.length }} featured</span>
+                <span class="badge">{{ games.length }} games</span>
             </div>
 
-            <div *ngIf="isLoading" class="panel empty-state">Loading featured games...</div>
-            <div *ngIf="errorMessage" class="panel error-box">{{ errorMessage }}</div>
+            <div *ngIf="isLoading" class="panel empty-state">
+                Loading games from database...
+            </div>
+
+            <div *ngIf="!isLoading && errorMessage" class="panel error-box">
+                {{ errorMessage }}
+            </div>
 
             <div *ngIf="!isLoading && !errorMessage && featuredGames.length > 0" class="games-grid">
                 <article class="game-card panel" *ngFor="let game of featuredGames">
                     <div class="game-image-wrap">
-                        <img [src]="game.imageUrl || 'https://via.placeholder.com/400x240?text=Game+Image'"
-                            [alt]="game.title" class="game-image" />
+                        <img [src]="getImageUrl(game)" [alt]="game.title" class="game-image" />
                         <span class="game-price">€{{ game.price }}</span>
                     </div>
 
                     <div class="game-body">
                         <h3 class="game-title">{{ game.title }}</h3>
+
                         <p class="game-description">
-                            {{ game.description || 'A must-play title for your collection.' }}
+                            {{ game.description || 'No description available.' }}
                         </p>
 
                         <div class="game-footer">
                             <span class="game-meta">Digital Code</span>
-                            <button class="btn btn-card">View Game</button>
+                            <a routerLink="/store" class="btn btn-card">View Store</a>
                         </div>
                     </div>
                 </article>
             </div>
 
             <div *ngIf="!isLoading && !errorMessage && featuredGames.length === 0" class="panel empty-state">
-                No featured games available yet.
+                No games found in the database yet.
             </div>
         </section>
 
