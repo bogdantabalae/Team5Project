@@ -14,7 +14,7 @@ export class HomeComponent implements OnInit {
     private http = inject(HttpClient);
     private cdr = inject(ChangeDetectorRef);
 
-    private gamesUrl = 'http://localhost:8080/api/games';
+    private gamesUrl = 'https://team5project.onrender.com/api/games';
 
     games: any[] = [];
     featuredGames: any[] = [];

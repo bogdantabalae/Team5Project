@@ -17,8 +17,8 @@ export class AdminComponent implements OnInit {
   private http = inject(HttpClient);
   private cdr = inject(ChangeDetectorRef);
 
-  private gamesUrl = 'http://localhost:8080/api/games';
-  private codesUrl = 'http://localhost:8080/api/game-codes';
+  private gamesUrl = 'https://team5project.onrender.com/api/games';
+  private codesUrl = 'https://team5project.onrender.com/api/game-codes';
 
   // Data
   gameCodes: any[] = [];

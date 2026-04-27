@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class GameCodeService {
 
-  private apiUrl = 'http://localhost:8080/api/game-codes';
+  private apiUrl = 'https://team5project.onrender.com/api/game-codes';
 
   constructor(private http: HttpClient) {}
 

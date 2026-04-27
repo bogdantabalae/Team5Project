@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 @Injectable({ providedIn: 'root' })
 export class OrderService {
 
-  private apiUrl = 'http://localhost:8080/api/orders/buy';
+  private apiUrl = 'https://team5project.onrender.com/api/orders/buy';
 
   constructor(private http: HttpClient) {}
 

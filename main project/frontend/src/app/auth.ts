@@ -5,7 +5,7 @@ import { isPlatformBrowser } from '@angular/common';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
-  private apiUrl = 'http://localhost:8080/api/auth';
+  private apiUrl = 'https://team5project.onrender.com/api/auth';
   private platformId = inject(PLATFORM_ID);
 
   constructor(private http: HttpClient) {}
