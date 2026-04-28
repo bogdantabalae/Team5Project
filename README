@@ -1,9 +1,57 @@
-Database-Driven Shopping Platform – Website connected to a central database storing product details, stock levels, prices, and sales history.
+# Game Store Platform
 
-Multi-User System – Supports multiple customers browsing and purchasing, with secure authentication and role-based access.
+## Overview
+Game Store Platform is a full-stack e-commerce web application developed as a group college project. The platform allows users to browse digital game products, create accounts, log in securely, and purchase game activation codes online.
 
-Manager Login & Dashboard – Dedicated manager account with access to administrative controls and business insights.
+The project was built using a modern three-tier architecture with a separate frontend, backend, and cloud database.
 
-AI Assistant for Management – Integrated AI assistant provides automated summaries (top-selling products, low stock alerts, poor performers).
+---
 
-Business Insights & Optimization – Uses sales data to support restocking decisions, inventory optimization, and performance tracking.
+## Features
+
+- User registration and login
+- Browse available game products
+- View product details
+- Purchase digital game codes
+- Responsive user interface
+- Secure backend API
+- Cloud-hosted database integration
+
+---
+
+## Technologies Used
+
+### Frontend
+- Angular
+- TypeScript
+- HTML / CSS
+
+### Backend
+- Java
+- Spring Boot
+- REST API
+- Maven
+
+### Database
+- Supabase (PostgreSQL)
+
+### Deployment
+- Firebase Hosting (Frontend)
+- Render (Backend)
+
+---
+
+## System Architecture
+
+User → Angular Frontend → Spring Boot Backend → Supabase Database
+
+---
+
+## Installation (Local Development)
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+ng serve
