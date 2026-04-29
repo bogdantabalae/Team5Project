@@ -1,21 +1,35 @@
 # Game Store Platform
 
 ## Overview
-Game Store Platform is a full-stack e-commerce web application developed as a group college project. The platform allows users to browse digital game products, create accounts, log in securely, and purchase game activation codes online.
 
-The project was built using a modern three-tier architecture with a separate frontend, backend, and cloud database.
+Game Store Platform is a **college group project** developed to demonstrate full-stack web development skills using modern technologies. The platform is an online marketplace where users can browse digital game products, create accounts, log in securely, and purchase game activation codes.
+
+The system is built using a three-tier architecture with separate frontend, backend, and database services deployed in the cloud.
+
+---
+
+## Project Purpose
+
+This project was created as part of a **school assignment** to showcase:
+
+- Frontend web development
+- Backend API development
+- Database integration
+- User authentication
+- Cloud deployment
+- Team collaboration
 
 ---
 
 ## Features
 
 - User registration and login
-- Browse available game products
+- Browse available games
 - View product details
-- Purchase digital game codes
+- Purchase digital game keys
 - Responsive user interface
-- Secure backend API
-- Cloud-hosted database integration
+- Secure REST API integration
+- Cloud-hosted database
 
 ---
 
@@ -24,13 +38,14 @@ The project was built using a modern three-tier architecture with a separate fro
 ### Frontend
 - Angular
 - TypeScript
-- HTML / CSS
+- HTML
+- CSS
 
 ### Backend
 - Java
 - Spring Boot
-- REST API
 - Maven
+- REST API
 
 ### Database
 - Supabase (PostgreSQL)
@@ -47,11 +62,34 @@ User → Angular Frontend → Spring Boot Backend → Supabase Database
 
 ---
 
-## Installation (Local Development)
+## Live Deployment
 
 ### Frontend
+Hosted on Firebase Hosting
 
-```bash
-cd frontend
-npm install
-ng serve
+### Backend
+Hosted on Render
+
+### Database
+Hosted on Supabase
+
+### The Website Link:
+https://shopping-platform-1c5dc.web.app/
+---
+
+## Team Project
+
+Developed collaboratively as a college group project by Team 5.
+
+---
+
+## Future Improvements
+
+- Payment gateway integration
+- Admin dashboard
+- Search and filtering
+- Order history
+- Email confirmations
+- Enhanced security
+
+---
