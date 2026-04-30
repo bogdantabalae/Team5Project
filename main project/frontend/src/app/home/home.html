@@ -82,7 +82,7 @@
             <div *ngIf="!isLoading && !errorMessage && featuredGames.length > 0" class="games-grid">
                 <article class="game-card panel" *ngFor="let game of featuredGames">
                     <div class="game-image-wrap">
-                        <img [src]="game.imageUrl || 'https://via.placeholder.com/400x240?text=Game+Image'"
+                        <img [src]="game.imageUrl || 'https://upload.wikimedia.org/wikipedia/en/4/46/Grand_Theft_Auto_VI.png'"
                             [alt]="game.title" class="game-image" />
                         <span class="game-price">€{{ game.price }}</span>
                     </div>

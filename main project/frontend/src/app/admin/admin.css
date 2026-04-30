@@ -493,3 +493,50 @@ select.input-field option {
   .filter-select { width: 100%; }
   .modal-footer { flex-direction: column; }
 }
+
+/* ---- AI Report ---- */
+.ai-divider {
+  border-top: 1px solid rgba(255,255,255,0.07);
+  margin: 28px 0 24px;
+}
+
+.btn-ai {
+  width: 100%;
+  padding: 13px;
+  background: linear-gradient(135deg, #059669, #0891b2);
+  color: #fff;
+  font-size: 15px;
+  letter-spacing: 0.3px;
+  box-shadow: 0 4px 20px rgba(5, 150, 105, 0.3);
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-ai:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(5, 150, 105, 0.45);
+}
+
+.btn-ai:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ai-report {
+  margin-top: 20px;
+  background: rgba(5, 150, 105, 0.06);
+  border: 1px solid rgba(5, 150, 105, 0.2);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.ai-report-content {
+  font-size: 14px;
+  color: #d1fae5;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}

@@ -1,8 +1,10 @@
-import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { GameCodeService } from '../game-code.service';
+
 
 @Component({
   selector: 'app-admin',
@@ -12,18 +14,23 @@ import { GameCodeService } from '../game-code.service';
   styleUrl: './admin.css'
 })
 export class AdminComponent implements OnInit {
-
+  
   private gameCodeService = inject(GameCodeService);
   private http = inject(HttpClient);
   private cdr = inject(ChangeDetectorRef);
 
   private gamesUrl = 'http://localhost:8080/api/games';
   private codesUrl = 'http://localhost:8080/api/game-codes';
+  private ordersUrl = 'http://localhost:8080/api/orders';
+
+  // Gemini API Key
+  private geminiApiKey = 'AIzaSyBXNQXeJ5o8Yc3L_jePxIywD2CSNqQiCN8';
 
   // Data
   gameCodes: any[] = [];
   filteredGameCodes: any[] = [];
   games: any[] = [];
+  orders: any[] = [];
 
   // Add game form
   newGame = { title: '', description: '', price: null as number | null, imageUrl: '' };
@@ -49,8 +56,16 @@ export class AdminComponent implements OnInit {
   errorMessage: string = '';
   isLoading: boolean = false;
 
+  // AI state
+  aiReport: string = '';
+  aiLoading: boolean = false;
+
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+
   ngOnInit() {
-    this.loadGames();
+    if (isPlatformBrowser(this.platformId)) {
+      this.loadGames();
+    }
   }
 
   // ---- Load Data ----
@@ -127,6 +142,45 @@ export class AdminComponent implements OnInit {
         this.loadGameCodes();
       },
       error: () => this.showError('Failed to add game code.')
+    });
+  }
+
+  // ---- AI Stock Report ----
+  getAiReport() {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    this.aiLoading = true;
+    this.aiReport = '';
+    this.cdr.detectChanges();
+ 
+    // Build stock summary per game
+    const stockSummary = this.games.map(game => {
+      const totalCodes = this.gameCodes.filter(gc => gc.game?.id === game.id).length;
+      const soldCodes = this.gameCodes.filter(gc => gc.game?.id === game.id && gc.sold).length;
+      const availableCodes = totalCodes - soldCodes;
+      return `- ${game.title} (€${game.price}): ${availableCodes} codes available, ${soldCodes} sold`;
+    }).join('\n');
+ 
+    const prompt = `You are a stock analyst for a digital game store. Here is the current stock and sales data:\n\n${stockSummary}\n\nPlease give a brief store report covering:\n1. Any games low on stock (2 or fewer codes available) that need restocking\n2. Any games with low sales (0 or very few sold) that might benefit from a promotion or sale\n3. The best selling game\n4. An overall store health summary\n\nKeep it concise, friendly and actionable. Use bullet points.`;
+ 
+    const body = {
+      contents: [{ parts: [{ text: prompt }] }]
+    };
+ 
+    this.http.post<any>(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${this.geminiApiKey}`,
+      body
+    ).subscribe({
+      next: (res) => {
+        this.aiReport = res?.candidates?.[0]?.content?.parts?.[0]?.text || 'No response received.';
+        this.aiLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.aiReport = 'Failed to get AI report. Please check your API key.';
+        this.aiLoading = false;
+        this.cdr.detectChanges();
+      }
     });
   }
 

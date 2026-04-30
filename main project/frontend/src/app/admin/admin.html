@@ -17,7 +17,7 @@
 
   <main class="admin-main">
 
-    <!-- Row 1: Add Game + Add Code -->
+    <!-- Row 1: Add Game + Add Code + AI Panel -->
     <div class="top-row">
 
       <!-- Panel 1: Add New Game -->
@@ -44,7 +44,7 @@
         <button class="btn btn-add" (click)="addGame()">+ Add Game</button>
       </section>
 
-      <!-- Panel 2: Add Game Code -->
+      <!-- Panel 2: Add Game Code + AI -->
       <section class="panel">
         <h2 class="panel-title">🔑 Add Game Code</h2>
         <p class="panel-sub">Assign an activation code to a game</p>
@@ -61,6 +61,18 @@
           <input type="text" [(ngModel)]="newCode" placeholder="e.g. XXXX-YYYY-ZZZZ-AAAA" class="input-field" />
         </div>
         <button class="btn btn-add" (click)="addCode()">+ Add Code</button>
+        
+        <!-- AI Stock Report -->
+        <div class="ai-divider"></div>
+        <h2 class="panel-title">🤖 AI Stock Report</h2>
+        <p class="panel-sub">Get AI-powered stock insights and recommendations</p>
+        <button class="btn btn-ai" (click)="getAiReport()" [disabled]="aiLoading">
+          {{ aiLoading ? '⏳ Analysing...' : '✨ Generate Report' }}
+        </button>
+ 
+        <div class="ai-report" *ngIf="aiReport">
+          <div class="ai-report-content">{{ aiReport }}</div>
+        </div>
       </section>
 
     </div>
